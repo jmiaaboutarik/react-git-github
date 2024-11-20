@@ -90,7 +90,30 @@ function Grp204WeatherApp() {
  useEffect(() => {
     getLocation();  // Appel de la fonction au chargement de la page
  }, []);
+ const [isDayMode, setIsDayMode] = useState(true);
+
+ const toggleDayNightMode = (timezoneOffset) => {
+    const localTime = new Date(new Date().getTime() + timezoneOffset * 1000);
+    const hours = localTime.getHours();
+    setIsDayMode(hours >= 6 && hours < 18);  // Mode jour entre 6h et 18h
+ };
  
+ useEffect(() => {
+    if (weather.data && weather.data.timezone) {
+       toggleDayNightMode(weather.data.timezone);
+    }
+ }, [weather]);
+ 
+ const bodyClass = isDayMode ? "day-mode" : "night-mode";
+ document.body.className = bodyClass;  // Ajout du thème dans le body pour appliquer le style
+ 
+ return (
+    <div className={`App ${bodyClass}`}>
+       <h1 className="app-name">Application Météo grp204</h1>
+       {/* Votre code ici */}
+    </div>
+ );
+  
   return (
     <div className="App">
       <h1 className="app-name">Application Météo grp204</h1>
